@@ -1,0 +1,27 @@
+{
+  "name": "node-beauty-redis",
+  "version": "1.0.0",
+  "description": "Redis module for node-beauty",
+  "private": false,
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hdwong/node-beauty-redis.git"
+  },
+  "dependencies": {
+    "redis": "*"
+  },
+  "keywords": [
+    "node-beauty",
+    "redis"
+  ],
+  "author": "Bun Wong <bunwong@qq.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hdwong/node-beauty-redis/issues"
+  },
+  "homepage": "https://github.com/hdwong/node-beauty-redis#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
