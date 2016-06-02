@@ -1,17 +1,20 @@
 "use strict";
 let core, config, logger, client = null,
     _ = require('lodash'), m = require('redis');
+
+let serviceName = 'redis';
 let redis = {
   assert: (error) => {
     if (error) {
       logger.error(error);
-      throw '[redis] ' + error;
+      throw '[' + serviceName + '] ' + error;
     }
   },
-  init: (c, callback) => {
+  init: (name, c, callback) => {
+    serviceName = name;
     core = c;
-    logger = core.getLogger('redis');
-    config = core.getConfig('redis');
+    logger = core.getLogger(serviceName);
+    config = core.getConfig(serviceName);
     if (!config.enable_api) {
       // disable api
       delete redis.get_keys;
@@ -44,7 +47,7 @@ let redis = {
   },
   get_value: (req, res, next) => {
     if (req.query.key === undefined) {
-      throw 'Params is wrong.';
+      throw 'Params is wrong';
     }
     client.get(req.query.key, (error, value) => {
       redis.assert(error);
@@ -53,7 +56,7 @@ let redis = {
   },
   put_value: (req, res, next) => {
     if (req.query.key === undefined || !req.body || req.body.value === undefined) {
-      throw 'Params is wrong.';
+      throw 'Params is wrong';
     }
     let key = req.query.key, value = req.body.value,
         ex = req.body.ex !== undefined && req.body.ex.match(/^\d+$/) ?
@@ -72,7 +75,7 @@ let redis = {
   },
   delete_value: (req, res, next) => {
     if (req.query.key === undefined) {
-      throw 'Params is wrong.';
+      throw 'Params is wrong';
     }
     client.keys(req.query.key, (error, keys) => {
       redis.assert(error);
@@ -88,7 +91,7 @@ let redis = {
   },
   put_incr: (req, res, next) => {
     if (req.query.key === undefined) {
-      throw 'Params is wrong.';
+      throw 'Params is wrong';
     }
     let increment = req.body && req.body.increment !== undefined &&
         req.body.increment.match(/^\d+$/) ?
@@ -112,7 +115,7 @@ let redis = {
   },
   post_command: (req, res, next) => {
     if (req.query.command === undefined) {
-      throw 'Params is wrong.';
+      throw 'Params is wrong';
     }
     let args = req.body && req.body.arguments !== undefined ? req.body.arguments : [];
     if (!_.isArray(args)) {
