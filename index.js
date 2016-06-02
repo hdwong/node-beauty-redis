@@ -99,7 +99,7 @@ let redis = {
     });
   },
   command: (command, args, next) => {
-    client.send_command(command, args, (error, value) {
+    client.send_command(command, args, (error, value) => {
       if (error) {
         // log only
         logger.error(error);
@@ -114,8 +114,7 @@ let redis = {
     if (req.query.command === undefined) {
       throw 'Params is wrong.';
     }
-    let args = req.body && req.body.arguments !== undefined ?
-        req.body.arguments : [];
+    let args = req.body && req.body.arguments !== undefined ? req.body.arguments : [];
     if (!_.isArray(args)) {
       args = [ args ];
     }
