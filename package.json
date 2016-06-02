@@ -9,6 +9,7 @@
     "url": "git+https://github.com/hdwong/node-beauty-redis.git"
   },
   "dependencies": {
+    "lodash": "*",
     "redis": "*"
   },
   "keywords": [
