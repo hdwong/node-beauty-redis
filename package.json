@@ -1,6 +1,6 @@
 {
   "name": "node-beauty-redis",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Redis module for node-beauty",
   "private": false,
   "main": "index.js",

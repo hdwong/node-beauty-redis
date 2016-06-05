@@ -1,2 +1,9 @@
 # node-beauty-redis
-Redis module for node-beauty
+
+## Install
+
+    $ npm install node-beauty－redis
+
+## API
+
+For full details, see http://www.hdwong.com/node-beauty/redis
