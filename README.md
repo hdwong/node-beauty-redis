@@ -2,7 +2,7 @@
 
 ## Install
 
-    $ npm install node-beauty－redis
+    $ npm install node-beauty-redis
 
 ## API
 
