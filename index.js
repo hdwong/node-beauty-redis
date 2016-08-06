@@ -55,10 +55,10 @@ let redis = {
     });
   },
   put_value: (req, res, next) => {
-    if (req.query.key === undefined || !req.body || req.body.value === undefined) {
+    if (!req.body || req.body.key === undefined || req.body.value === undefined) {
       throw 'Params is wrong';
     }
-    let key = req.query.key, value = req.body.value,
+    let key = req.body.key, value = req.body.value,
         ex = req.body.ex !== undefined && req.body.ex.match(/^\d+$/) ?
             parseInt(req.body.ex, 10) : false;
     if (ex) {
@@ -74,10 +74,10 @@ let redis = {
     }
   },
   delete_value: (req, res, next) => {
-    if (req.query.key === undefined) {
+    if (req.body.key === undefined) {
       throw 'Params is wrong';
     }
-    client.keys(req.query.key, (error, keys) => {
+    client.keys(req.body.key, (error, keys) => {
       redis.assert(error);
       if (keys.length) {
         client.del(keys, (error, value) => {
@@ -90,13 +90,13 @@ let redis = {
     });
   },
   put_incr: (req, res, next) => {
-    if (req.query.key === undefined) {
+    if (req.body.key === undefined) {
       throw 'Params is wrong';
     }
     let increment = req.body && req.body.increment !== undefined &&
         req.body.increment.match(/^\d+$/) ?
         Math.max(1, parseInt(req.body.increment, 10)) : 1;
-    client.incrby(req.query.key, increment, (error, value) => {
+    client.incrby(req.body.key, increment, (error, value) => {
       redis.assert(error);
       next({ value: value });
     });
@@ -114,14 +114,14 @@ let redis = {
     });
   },
   post_command: (req, res, next) => {
-    if (req.query.command === undefined) {
+    if (req.body.command === undefined) {
       throw 'Params is wrong';
     }
     let args = req.body && req.body.arguments !== undefined ? req.body.arguments : [];
     if (!_.isArray(args)) {
       args = [ args ];
     }
-    client.send_command(req.query.command, args, (error, value) => {
+    client.send_command(req.body.command, args, (error, value) => {
       redis.assert(error);
       next({ value: value });
     });
