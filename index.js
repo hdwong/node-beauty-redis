@@ -115,8 +115,8 @@ let redis = {
       throw 'Params is wrong';
     }
     let increment = req.body && req.body.increment !== undefined &&
-        req.body.increment.match(/^\d+$/) ?
-        Math.max(1, parseInt(req.body.increment, 10)) : 1;
+        req.body.increment.match(/^[-+]?\d+$/) ?
+        parseInt(req.body.increment, 10) : 1;
     client.incrby(req.body.key, increment, (error, value) => {
       redis.assert(error);
       next({ value: value });
