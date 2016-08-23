@@ -77,17 +77,38 @@ let redis = {
     if (req.body.key === undefined) {
       throw 'Params is wrong';
     }
-    client.keys(req.body.key, (error, keys) => {
-      redis.assert(error);
-      if (keys.length) {
-        client.del(keys, (error, value) => {
+    let deleteKey = (key, callback) => {
+      if (key.indexOf('*') >= 0) {
+        client.keys(key, (error, keys) => {
           redis.assert(error);
-          next({ affected: value });
+          core.forEach(keys, (k, n) => {
+            client.del(k, n);
+          }, () => {
+            callback(keys.length);
+          });
         });
       } else {
-        next({ affected: 0 });
+        client.del(key, (error, value) => {
+          redis.assert(error);
+          callback(value ? 1 : 0);
+        });
       }
-    });
+    };
+    if (_.isArray(req.body.key)) {
+      let count = 0;
+      core.forEach(req.body.key, (key, n) => {
+        deleteKey(key, (value) => {
+          count += value;
+          n();
+        });
+      }, () => {
+        next({ affected: count });
+      });
+    } else {
+      deleteKey(req.body.key, (value) => {
+        next({ affected: value });
+      });
+    }
   },
   put_incr: (req, res, next) => {
     if (req.body.key === undefined) {
